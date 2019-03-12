@@ -22,10 +22,14 @@
 #define BM_BM_SIM__ASSERT_H_
 
 // An assert that cannot be removed with NDEBUG
+#include <bm/bm_sim/source_info.h>
 
 namespace bm {
 
 [[ noreturn ]] void _assert(const char* expr, const char* file, int line);
+
+[[ noreturn ]] void abort_msg(const char* error_msg,
+                              const SourceInfo* srcInfo);
 
 }  // namespace bm
 
@@ -35,5 +39,8 @@ namespace bm {
 #define _BM_UNREACHABLE(msg) bm::_assert(msg, __FILE__, __LINE__)
 
 #define _BM_UNUSED(x) ((void)x)
+
+#define _BM_COND_ABORT(expr, source_info, error_msg) \
+    ((expr) ? bm::abort_msg(error_msg, source_info) : (void)0)
 
 #endif  // BM_BM_SIM__ASSERT_H_
