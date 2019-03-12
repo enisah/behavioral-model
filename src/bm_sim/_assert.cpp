@@ -19,6 +19,7 @@
  */
 
 #include <bm/bm_sim/_assert.h>
+#include <bm/bm_sim/logger.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -28,6 +29,18 @@ namespace bm {
 void _assert(const char* expr, const char* file, int line) {
   std::cerr << "Assertion '" << expr << "' failed, file '" << file
             << "' line '" << line << "'.\n";
+  std::abort();
+}
+
+void abort_msg(const char* error_msg, const SourceInfo* srcInfo) {
+  if (srcInfo) {
+    BMLOG_ERROR("{}: {} failed, file {}, line {}",
+      error_msg, srcInfo->get_source_fragment(),
+      srcInfo->get_filename(),
+      srcInfo->get_line());
+  } else {
+    BMLOG_ERROR("{}", error_msg);
+  }
   std::abort();
 }
 
