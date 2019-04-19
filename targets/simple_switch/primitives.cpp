@@ -444,6 +444,22 @@ class register_write
 
 REGISTER_PRIMITIVE(register_write);
 
+class assert_ : public ActionPrimitive<const Data &> {
+  void operator ()(const Data &src) {
+    _BM_COND_ABORT(src.test_eq(0), srcInfo, "Assert error");
+  }
+};
+
+REGISTER_PRIMITIVE_W_NAME("assert", assert_);
+
+class assume_ : public ActionPrimitive<const Data &> {
+  void operator ()(const Data &src) {
+    _BM_COND_ABORT(src.test_eq(0), srcInfo, "Assume error");
+  }
+};
+
+REGISTER_PRIMITIVE_W_NAME("assume", assume_);
+
 // I cannot name this "truncate" and register it with the usual
 // REGISTER_PRIMITIVE macro, because of a name conflict:
 //

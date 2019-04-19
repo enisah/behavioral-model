@@ -398,6 +398,22 @@ class truncate_ : public ActionPrimitive<const Data &> {
 
 REGISTER_PRIMITIVE_W_NAME("truncate", truncate_);
 
+class assert_ : public ActionPrimitive<const Data &> {
+  void operator ()(const Data &src) {
+    _BM_COND_ABORT(src.test_eq(0), srcInfo, "Assert error");
+  }
+};
+
+REGISTER_PRIMITIVE_W_NAME("assert", assert_);
+
+class assume_ : public ActionPrimitive<const Data &> {
+  void operator ()(const Data &src) {
+    _BM_COND_ABORT(src.test_eq(0), srcInfo, "Assume error");
+  }
+};
+
+REGISTER_PRIMITIVE_W_NAME("assume", assume_);
+
 // dummy function, which ensures that this unit is not discarded by the linker
 // it is being called by the constructor of PsaSwitch
 // the previous alternative was to have all the primitives in a header file (the
